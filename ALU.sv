@@ -4,7 +4,7 @@ module ALU(
     input [4:0] ALUop,
     input[31:0] A, B,
     output reg[31:0] out,
-    output zero
+    output reg zero
 );
     //WATCH OUT FOR A < B OR A > B
     always @(*) begin

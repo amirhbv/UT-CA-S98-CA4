@@ -15,7 +15,7 @@ module ID_EX(
     input[1:0] control_signals_WB,
     output[3:0] out_control_signals_M,
     output[6:0] out_control_signals_EX,
-    output[1:0] out_control_signals_WB
+    output[1:0] out_control_signals_WB,
 	input[4:0]  Rt_out,
                 Rs_out,
                 Rd_out,
@@ -45,7 +45,7 @@ module ID_EX(
     assign r1 = reg_r1 ;
     assign r2 = reg_r2 ;
 
-    always (@posedge clk , posedge rst) begin
+    always @(posedge clk , posedge rst) begin
         if ( rst )  begin
             reg_Rt <= 4'b0 ;
             reg_Rs <= 4'b0 ;

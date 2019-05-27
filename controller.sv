@@ -46,7 +46,7 @@ module Controller(
             6'b000000 : begin
                 RegDst = 1 ;
                 RegWrite = 1 ;
-                case(inst[5:0]) begin
+                case(inst[5:0])
                     //ADD
                     6'b100000 : ALUop <= 5'b00001 ;
                     //SUB
@@ -57,7 +57,7 @@ module Controller(
                     6'b101010 : ALUop <= 5'b01000 ;
                     //OR
                     6'b100101 : ALUop <= 5'b10000 ;
-                end
+				endcase
 
             end
 

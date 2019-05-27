@@ -6,5 +6,5 @@ module WB_stage(
     input MemToReg,
     output[31:0] write_out_data
 );
-    assign write_out_data = MemToReg ? read_data , ALU_result ;
+    assign write_out_data = MemToReg ? read_data : ALU_result ;
 endmodule

@@ -15,4 +15,8 @@ module DataMemory(
         if ( write_enable )
             MEM[ addr[9:0] ] <= write_data ;
     end
+
+	initial begin
+		MEM[0] = 5;
+	end
 endmodule

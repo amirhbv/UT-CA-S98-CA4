@@ -6,7 +6,7 @@ module Datapath(
 	wire[31:0] PC_out, inst_out, PC_offset;
 	wire[31:0] PC_out_IF_ID, inst_out_IF_ID, offset_out_IF_ID, offset_out_ID_EX;
 	wire flush, holdPC, isBranch, PC_src_controller;
-	wire[1:0] WB_control_signals_controller, WB_control_signals_ID_EX, WB_control_signals_EX_MEMو WB_control_signals_MEM_WB;
+	wire[1:0] WB_control_signals_controller, WB_control_signals_ID_EX, WB_control_signals_EX_MEM, WB_control_signals_MEM_WB;
 	wire[3:0] M_control_signals_controller, M_control_signals_ID_EX, M_control_signals_EX_MEM;
 	wire[6:0] EX_control_signals_controller, EX_control_signals_ID_EX;
 	wire[31:0] PC_j_out_controller;
@@ -50,9 +50,9 @@ module Datapath(
 	);
 
 	wire[5:0] Rt_out_IF_ID, Rs_out_IF_ID, Rd_out_IF_ID;
-	assign Rt_out_IF_ID = inst_out_IF_ID[16:20];
-	assign Rs_out_IF_ID = inst_out_IF_ID[21:25];
-	assign Rd_out_IF_ID = inst_out_IF_ID[11:15];
+	assign Rt_out_IF_ID = inst_out_IF_ID[20:16];
+	assign Rs_out_IF_ID = inst_out_IF_ID[25:21];
+	assign Rd_out_IF_ID = inst_out_IF_ID[15:11];
 
 	HazardDetection hazardDetection(
 		.Rt_IF_ID(Rt_out_IF_ID),
@@ -104,7 +104,7 @@ module Datapath(
 		.control_signals_EX(EX_control_signals_controller), // todo: add mux for flush (colored red in page 33)
 		.out_control_signals_WB(WB_control_signals_ID_EX),
 		.out_control_signals_M(M_control_signals_ID_EX),
-		.out_control_signals_EX(EX_control_signals_ID_EX)
+		.out_control_signals_EX(EX_control_signals_ID_EX),
 		.Rt_out(Rt_out_ID_EX),
         .Rs_out(Rs_out_ID_EX),
         .Rd_out(Rd_out_ID_EX),
@@ -128,7 +128,7 @@ module Datapath(
 		.Rs(Rs_out_ID_EX),
 		.Rd(Rd_out_ID_EX),
 		.reg_dest(reg_dest_out_EX_stage),
-		.op2(op2_out_EX_stage)
+		.op2_out(op2_out_EX_stage)
 	);
 
 	ForwardingUnit forwardingUnit(
@@ -176,7 +176,7 @@ module Datapath(
 		.ALU_result(ALU_out_zero_EX_MEM),
 		.MEM_read_data(data_memory_read_data_out),
 		.result_out(result_out_MEM_WB),
-		.read_data_out(read_data_out_MEM_WB)
+		.read_data_out(read_data_out_MEM_WB),
 		.reg_dst_EX_MEM(reg_dest_out_EX_MEM),
 		.control_signal_WB_out(WB_control_signals_MEM_WB),
 		.reg_dst_out(reg_dest_out_MEM_WB)

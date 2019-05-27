@@ -16,8 +16,8 @@ module EX_Stage(
     input [4:0] Rt,
                 Rs,
                 Rd,
-    output reg[4:0] reg_dest
-    output [31:0] op2
+    output reg[4:0] reg_dest,
+    output [31:0] op2_out
 );
 
     wire[4:0] ALUop = signals[4:0] ;
@@ -25,6 +25,8 @@ module EX_Stage(
     wire RegDst = signals[6] ;
 
     reg[31:0] op1 , op2 ;
+
+	assign op2_out = op2;
 
     ALU alu (ALUop , op1 , op2 , result , zero) ;
 
