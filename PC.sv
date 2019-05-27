@@ -1,6 +1,7 @@
 module PC(
     input clk, rst,
-    input PCsrc, holdPC,
+    input PCsrc, holdPC, isBranch,
+    input [31:0] PCoffset,
     input[31:0] jVal,
     output[31:0] PCVal
 );
@@ -9,7 +10,8 @@ module PC(
         if ( rst )
             value <= 10'b0 ;
         else if ( holdPC == 0 ) begin
-            if (PCsrc)  value <= jVal ;
+            if (isBranch) value <= value + PCoffset;
+            else if (PCsrc)  value <= jVal ;
             else value <= value + 4 ;
         end
     end
