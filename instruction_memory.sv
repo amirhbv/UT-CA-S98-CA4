@@ -12,7 +12,7 @@ module InstructionMemory(
 	assign inst_out = {mem[address], mem[address + 1], mem[address + 2], mem[address + 3]};
 
 	initial begin
-		{mem[0], mem[0 + 1], mem[0 + 2], mem[0 + 3]} = { 6'b100011, 5'b00001, 5'b00010, 5'b00000, 5'b00000, 6'b000000 } // LW  R1, R2, 0
-		{mem[1], mem[1 + 1], mem[1 + 2], mem[1 + 3]} = { 6'b000000, 5'b00001, 5'b00010, 5'b00011, 5'b00000, 6'b100000 } // ADD R1, R2, R3
+		{mem[0], mem[0 + 1], mem[0 + 2], mem[0 + 3]} = { 6'b100011, 5'b00001, 5'b00010, 5'b00000, 5'b00000, 6'b000000 } ; // LW  R1, R2, 0
+		{mem[1], mem[1 + 1], mem[1 + 2], mem[1 + 3]} = { 6'b000000, 5'b00001, 5'b00010, 5'b00011, 5'b00000, 6'b100000 } ; // ADD R1, R2, R3
 	end
 endmodule
