@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module HazardDetection(
     input[4:0]  Rt_IF_ID,
                 Rs_IF_ID,
@@ -30,9 +32,9 @@ module HazardDetection(
 
 
         if (
-            (signals_M_ID_EX[2] == 1 && zero_ALU) || 
+            (signals_M_ID_EX[2] == 1 && zero_ALU) ||
             (signals_M_ID_EX[3] == 1 && ~zero_ALU)
-        ) begin           
+        ) begin
             isBranch = 1;
             PC_offset = offset_ID_EX;
         end

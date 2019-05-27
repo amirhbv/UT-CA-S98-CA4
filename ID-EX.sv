@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module ID_EX(
     input clk, rst,
     input[31:0] read_data1,
@@ -24,7 +26,7 @@ module ID_EX(
     reg[6:0] reg_control_signals_EX ;
     reg[3:0] reg_control_signals_M  ;
     reg[1:0] reg_control_signals_WB ;
-    
+
     assign out_control_signals_EX = reg_control_signals_EX ;
     assign out_control_signals_M  = reg_control_signals_M  ;
     assign out_control_signals_WB = reg_control_signals_WB ;
@@ -41,7 +43,7 @@ module ID_EX(
 
             reg_r1 <= 32'b0 ;
             reg_r2 <= 32'b0 ;
-            
+
             reg_control_signals_EX <= control_signals_EX ;
             reg_control_signals_M <= 4'b0 ;
             reg_control_signals_WB <= 2'b0 ;
@@ -57,4 +59,4 @@ module ID_EX(
             reg_offset <= offset ;
         end
     end
-endmodule 
+endmodule

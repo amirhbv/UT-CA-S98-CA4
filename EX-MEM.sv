@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module EX_MEM(
     input clk, rst,
     input zero,
@@ -43,4 +45,4 @@ module EX_MEM(
             reg_RegDest <= RegDest ;
         end
     end
-endmodule 
+endmodule

@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module EX_Stage(
     input[ 2:0] fwdA,
                 fwdB,

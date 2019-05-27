@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module PC(
     input clk, rst,
     input PCsrc, holdPC, isBranch,

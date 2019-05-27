@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module Controller(
     input[31:0] inst,
     output[1:0] WB_control_signals,

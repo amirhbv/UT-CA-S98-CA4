@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module RegisterFile(
     input clk, rst,
     input[4:0]  read_reg1,

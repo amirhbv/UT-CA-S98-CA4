@@ -1,3 +1,5 @@
+`timescale 1ns/1ns
+
 module ForwardingUnit(
     input[4:0]  Rt_ID_EX,
                 Rs_ID_EX,
