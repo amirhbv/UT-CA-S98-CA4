@@ -3,16 +3,38 @@ module HazardDetection(
                 Rs_IF_ID,
                 Rt_ID_EX,
     input[3:0]  signals_M_ID_EX,
+    input[3:0]  signals_M_Controller,
     input[31:0] offset_ID_EX,
     input       zero_ALU,
 
-    output      holdPC,
+    output reg  holdPC,
                 IF_ID_Flush,
-                mux_selector // todo: fix name
+                isBranch,
+    output reg[31:0] PC_offset,
+
 );
-    if ( signals_M_ID_EX[1] == 1) begin
-        if (Rt_ID_EX == Rs_IF_ID || Rt_ID_EX == Rt_IF_ID)
+    reg[1:0] cnt;
+    always @(*) begin
+        { holdPC, IF_ID_Flush } = 0;
+        if ( signals_M_ID_EX[1] == 1) begin
+            if (Rt_ID_EX == Rs_IF_ID || Rt_ID_EX == Rt_IF_ID)
+                holdPC = 1;
+                IF_ID_Flush = 1;
+        end
+
+        // beq, bne case
+        if ( signals_M_Controller[2] == 1 || signals_M_Controller[3] == 1) begin
             holdPC = 1;
             IF_ID_Flush = 1;
+        end
+
+
+        if (
+            (signals_M_ID_EX[2] == 1 && zero_ALU) || 
+            (signals_M_ID_EX[3] == 1 && ~zero_ALU)
+        ) begin           
+            isBranch = 1;
+            PC_offset = offset_ID_EX;
+        end
     end
 endmodule
