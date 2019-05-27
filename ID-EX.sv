@@ -16,6 +16,10 @@ module ID_EX(
     output[3:0] out_control_signals_M,
     output[6:0] out_control_signals_EX,
     output[1:0] out_control_signals_WB
+	input[4:0]  Rt_out,
+                Rs_out,
+                Rd_out,
+	output[31:0] offset_out
 );
 
     reg [4:0] reg_Rt ;
@@ -30,6 +34,12 @@ module ID_EX(
     assign out_control_signals_EX = reg_control_signals_EX ;
     assign out_control_signals_M  = reg_control_signals_M  ;
     assign out_control_signals_WB = reg_control_signals_WB ;
+
+	assign Rt_out = reg_Rt;
+	assign Rs_out = reg_Rs;
+	assign Rd_out = reg_Rd;
+
+	assign offset_out = offset;
 
     reg [31:0] reg_r1 , reg_r2  ;
     assign r1 = reg_r1 ;
