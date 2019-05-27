@@ -1,4 +1,4 @@
-module forwardingUnit(
+module ForwardingUnit(
     input[4:0]  Rt_ID_EX,
                 Rs_ID_EX,
                 Rd_EX_MEM,
@@ -21,9 +21,9 @@ module forwardingUnit(
         if (Reg_Write_MEM_WB) begin
             if ( Rd_MEM_WB == Rs_ID_EX )
                 fwdA = 3'b100 ;
-            
+
             if ( Rd_MEM_WB == Rt_ID_EX )
                 fwdB = 3'b100 ;
         end
     end
-endmodule 
+endmodule

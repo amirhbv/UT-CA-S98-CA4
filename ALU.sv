@@ -13,6 +13,6 @@ module ALU(
             5'b00100 : out <= A & B ;
             5'b01000 : out <=(A < B);
             5'b10000 : out <= A | B ;
-        endcase 
+        endcase
     end
-endmodule 
+endmodule

@@ -1,4 +1,4 @@
-module DATA_MEMORY(
+module DataMemory(
     input clk,
     input[31:0] addr,
     input write_enable,
@@ -13,4 +13,4 @@ module DATA_MEMORY(
         if ( write_enable )
             MEM[ addr[9:0] ] <= write_data ;
     end
-endmodule 
+endmodule

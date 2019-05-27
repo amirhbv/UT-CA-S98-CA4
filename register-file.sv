@@ -1,8 +1,8 @@
-module reg_file(
+module RegisterFile(
     input clk, rst,
     input[4:0]  read_reg1,
                 read_reg2,
-                write_reg, 
+                write_reg,
     input[31:0] write_value,
     output [31:0] read_data1,
                 read_data2
@@ -17,9 +17,9 @@ module reg_file(
         else if ( write_reg != 0 )
             mem[write_reg] <= write_value ;
     end
-    
+
     always @(negedge clk) begin
         if ( write_reg != 0 )
             mem[write_reg] <= write_value ;
     end
-endmodule 
+endmodule

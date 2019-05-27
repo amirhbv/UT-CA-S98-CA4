@@ -1,5 +1,5 @@
-module EX_stage(
-    input[ 2:0] fwdA, 
+module EX_Stage(
+    input[ 2:0] fwdA,
                 fwdB,
     input[31:0] ID_EX_op1,
                 ID_EX_op2,
@@ -23,7 +23,7 @@ module EX_stage(
     wire RegDst = signals[6] ;
 
     reg[31:0] op1 , op2 ;
-    
+
     ALU alu (ALUop , op1 , op2 , result , zero) ;
 
     always @(*) begin
@@ -35,11 +35,11 @@ module EX_stage(
         if ( fwdB == 3'b010 ) op2 <= EX_MEM_op2 ;
         if ( fwdB == 3'b100 ) op2 <= MEM_WB_op2 ;
 
-        if ( RegDst ) 
+        if ( RegDst )
             reg_dest <= Rd ;
         else
-            reg_dest <= Rt ; 
-        
+            reg_dest <= Rt ;
+
     end
 
 

@@ -1,12 +1,12 @@
-module controller(
+module Controller(
     input[31:0] inst,
     output[1:0] WB_control_signals,
     output[3:0] M_control_signals,
     output[6:0] EX_control_signals,
-    output reg jOnlyPCsrc, 
+    output reg jOnlyPCsrc,
     output reg[31:0] jNextPC
 );
-    
+
     //EX signals
     reg[4:0] ALUop ;
     reg ALUsrc ;
@@ -74,12 +74,12 @@ module controller(
                 MemToReg = 1 ;
             end
 
-            //J - changes PC 
+            //J - changes PC
             6'b000010 : begin
                 jOnlyPCsrc = 1 ;
                 jNextPC = { 4'b0000 , inst[25:0] , 2'b00 } ;
             end
-            
+
             //BEQ - if there was no data dependency we should change the PC immdtly
             6'b000100 : begin
                 PCsrcForBEQ = 1 ;
@@ -89,7 +89,7 @@ module controller(
             6'b000101 : begin
                 PCsrcForBNE = 1 ;
             end
-            
+
         endcase
     end
 endmodule
