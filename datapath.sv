@@ -10,17 +10,17 @@ module Datapath(
 	wire[3:0] M_control_signals_controller, M_control_signals_ID_EX, M_control_signals_EX_MEM;
 	wire[6:0] EX_control_signals_controller, EX_control_signals_ID_EX;
 	wire[31:0] PC_j_out_controller;
-	wire[5:0] Rt_out_ID_EX, Rs_out_ID_EX, Rd_out_ID_EX;
+	wire[4:0] Rt_out_ID_EX, Rs_out_ID_EX, Rd_out_ID_EX;
 	wire[31:0] R1_out_reg_file, R2_out_reg_file;
 	wire[31:0] R1_out_ID_EX, R2_out_ID_EX;
-	wire forwardA, forwardB;
+	wire[2:0] forwardA, forwardB;
 	wire ALU_out_zero;
 	wire[31:0] ALU_out_result, op2_out_EX_stage, ALU_out_result_EX_MEM, write_data_out_EX_MEM;
 	wire[4:0] reg_dest_out_EX_stage, reg_dest_out_EX_MEM, reg_dest_out_MEM_WB;
 	wire[31:0] data_memory_read_data_out;
 	wire[31:0] result_out_MEM_WB;
 	wire[31:0] read_data_out_MEM_WB;
-	wire[31:0] write_out_data_WB_out;
+	wire[31:0] write_out_data_WB_out, ALU_result_out_EX_MEM;
 
 	PC pc(
 		.clk(clk),
@@ -49,7 +49,7 @@ module Datapath(
 		.instr15_0(offset_out_IF_ID)
 	);
 
-	wire[5:0] Rt_out_IF_ID, Rs_out_IF_ID, Rd_out_IF_ID;
+	wire[4:0] Rt_out_IF_ID, Rs_out_IF_ID, Rd_out_IF_ID;
 	assign Rt_out_IF_ID = inst_out_IF_ID[20:16];
 	assign Rs_out_IF_ID = inst_out_IF_ID[25:21];
 	assign Rd_out_IF_ID = inst_out_IF_ID[15:11];
@@ -95,7 +95,7 @@ module Datapath(
 		.read_data2(R2_out_reg_file),
 		.r1(R1_out_ID_EX),
 		.r2(R2_out_ID_EX),
-		.offset(offset_IF_ID),
+		.offset(offset_out_IF_ID),
 		.Rt(Rt_out_IF_ID),
 		.Rs(Rs_out_IF_ID),
 		.Rd(Rd_out_IF_ID),
@@ -155,7 +155,7 @@ module Datapath(
 		.RegDestOut(reg_dest_out_EX_MEM),
 		.control_signals_M_out(M_control_signals_EX_MEM),
 		.control_signals_WB_out(WB_control_signals_EX_MEM),
-		.result_out(ALU_out_zero_EX_MEM),
+		.result_out(ALU_result_out_EX_MEM),
 		.write_data_out(write_data_out_EX_MEM)
 	);
 
@@ -173,7 +173,7 @@ module Datapath(
 		.clk(clk),
 		.rst(rst),
 		.control_signal_WB(WB_control_signals_EX_MEM),
-		.ALU_result(ALU_out_zero_EX_MEM),
+		.ALU_result(ALU_result_out_EX_MEM),
 		.MEM_read_data(data_memory_read_data_out),
 		.result_out(result_out_MEM_WB),
 		.read_data_out(read_data_out_MEM_WB),
