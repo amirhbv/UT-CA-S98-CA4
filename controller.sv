@@ -14,19 +14,19 @@ module Controller(
     reg ALUsrc ;
     reg RegDst ;
 
-    assign EX_control_signals = {RegDst , ALUsrc , ALUop} ;
+    assign EX_control_signals = {RegDst, ALUsrc, ALUop} ;
 
     //WB signals
     reg MemToReg ;
     reg RegWrite ;
-    assign WB_control_signals = {RegWrite , MemToReg} ;
+    assign WB_control_signals = {RegWrite, MemToReg} ;
 
     //M  signals
     reg MemWrite ;
     reg MemRead ;
     reg PCsrcForBEQ ;
     reg PCsrcForBNE ;
-    assign M_control_signals = {PCsrcForBNE ,  PCsrcForBEQ ,MemRead , MemWrite} ;
+    assign M_control_signals = {PCsrcForBNE, PCsrcForBEQ, MemRead, MemWrite} ;
 
 
     always@(*) begin
