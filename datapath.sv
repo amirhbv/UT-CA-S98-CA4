@@ -6,7 +6,7 @@ module Datapath(
 	wire[31:0] PC_out, inst_out, PC_offset;
 	wire[31:0] PC_out_IF_ID, inst_out_IF_ID, offset_out_IF_ID, offset_out_ID_EX;
 	wire flush, holdPC, isBranch, PC_src_controller;
-	wire[1:0] WB_control_signals_controller, WB_control_signals_ID_EX, WB_control_signals_EX_MEM;
+	wire[1:0] WB_control_signals_controller, WB_control_signals_ID_EX, WB_control_signals_EX_MEMو WB_control_signals_MEM_WB;
 	wire[3:0] M_control_signals_controller, M_control_signals_ID_EX, M_control_signals_EX_MEM;
 	wire[6:0] EX_control_signals_controller, EX_control_signals_ID_EX;
 	wire[31:0] PC_j_out_controller;
@@ -16,7 +16,11 @@ module Datapath(
 	wire forwardA, forwardB;
 	wire ALU_out_zero;
 	wire[31:0] ALU_out_result, op2_out_EX_stage, ALU_out_result_EX_MEM, write_data_out_EX_MEM;
-	wire[4:0] reg_dest_out_EX_stage, reg_dest_out_EX_MEM;
+	wire[4:0] reg_dest_out_EX_stage, reg_dest_out_EX_MEM, reg_dest_out_MEM_WB;
+	wire[31:0] data_memory_read_data_out;
+	wire[31:0] result_out_MEM_WB;
+	wire[31:0] read_data_out_MEM_WB;
+	wire[31:0] write_out_data_WB_out;
 
 	PC pc(
 		.clk(clk),
@@ -78,8 +82,8 @@ module Datapath(
 		.rst(rst),
 		.read_reg1(Rs_out_IF_ID),
 		.read_reg2(Rt_out_IF_ID),
-		ouput write_reg, // from MEM/WB
-		input[31:0] write_value,
+		.write_reg(reg_dest_out_MEM_WB),
+		.write_value(write_out_data_WB_out),
 		.read_data1(R1_out_reg_file),
 		.read_data2(R2_out_reg_file)
 	);
@@ -114,8 +118,8 @@ module Datapath(
 		.ID_EX_op2(R2_out_ID_EX),
 		.EX_MEM_op1(ALU_out_result_EX_MEM),
 		.EX_MEM_op2(ALU_out_result_EX_MEM),
-		input[31:0] MEM_WB_op1,
-					MEM_WB_op2,
+		.MEM_WB_op1(write_out_data_WB_out),
+		.MEM_WB_op2(write_out_data_WB_out),
 		.signals(EX_control_signals_ID_EX),
 		.Zero(ALU_out_zero),
 		.result(ALU_out_result),
@@ -131,8 +135,8 @@ module Datapath(
 		.Rt_ID_EX(Rt_out_ID_EX),
 		.Rs_ID_EX(Rs_out_ID_EX),
 		.Rd_EX_MEM(reg_dest_out_EX_MEM),
-		input[4:0] Rd_MEM_WB,
-		input Reg_Write_MEM_WB,
+		.Rd_MEM_WB(reg_dest_out_MEM_WB),
+		.Reg_Write_MEM_WB(WB_control_signals_MEM_WB[1]),
 		.Reg_Write_EX_MEM(WB_control_signals_EX_MEM[1]),
 		.fwdA(forwardA),
 		.fwdB(forwardB)
@@ -154,4 +158,35 @@ module Datapath(
 		.result_out(ALU_out_zero_EX_MEM),
 		.write_data_out(write_data_out_EX_MEM)
 	);
+
+	// todo: can use mem-stage instead
+	DataMemory dataMemory(
+		.clk(clk),
+		.addr(ALU_out_result_EX_MEM),
+		.write_enable(M_control_signals_EX_MEM[0]),
+		.mem_read(M_control_signals_EX_MEM[1]),
+		.write_data(write_data_out_EX_MEM),
+		.read_data(data_memory_read_data_out)
+	);
+
+	MEM_WB reg_MEM_WB(
+		.clk(clk),
+		.rst(rst),
+		.control_signal_WB(WB_control_signals_EX_MEM),
+		.ALU_result(ALU_out_zero_EX_MEM),
+		.MEM_read_data(data_memory_read_data_out),
+		.result_out(result_out_MEM_WB),
+		.read_data_out(read_data_out_MEM_WB)
+		.reg_dst_EX_MEM(reg_dest_out_EX_MEM),
+		.control_signal_WB_out(WB_control_signals_MEM_WB),
+		.reg_dst_out(reg_dest_out_MEM_WB)
+	);
+
+	WB_stage wB_stage(
+		.read_data(read_data_out_MEM_WB),
+		.ALU_result(result_out_MEM_WB),
+		.MemToReg(WB_control_signals_EX_MEM[0]),
+		.write_out_data(write_out_data_WB_out)
+	);
+
 endmodule
