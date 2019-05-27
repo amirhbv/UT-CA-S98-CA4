@@ -12,8 +12,7 @@ module HazardDetection(
     output reg  holdPC,
                 IF_ID_Flush,
                 isBranch,
-    output reg[31:0] PC_offset,
-
+    output reg[31:0] PC_offset
 );
     reg[1:0] cnt;
     always @(*) begin
