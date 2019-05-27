@@ -4,13 +4,13 @@ module EX_MEM(
     input clk, rst,
     input zero,
     input[31:0] result,
+    //op2 in EX-stage is write_data
     input[31:0] write_data,
     input[4:0] RegDest,
     input[1:0] control_signals_WB,
     input[3:0] control_signals_M,
-    //op2 in EX-stage is write_data
+
     output[4:0] RegDestOut,
-    input[31:0] write_data,
     output[3:0] control_signals_M_out,
     output[1:0] control_signals_WB_out,
     output[31:0] result_out,
