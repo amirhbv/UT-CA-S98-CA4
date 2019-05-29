@@ -88,6 +88,10 @@ module Datapath(
 		.read_data2(R2_out_reg_file)
 	);
 
+	// in case of flush make input controll signalls zero
+	wire[1:0] to_ID_EX_WB_control_signals_controller = flush ? 0 : WB_control_signals_controller;
+	wire[3:0] to_ID_EX_M_control_signals_controller = flush ? 0 : M_control_signals_controller;
+	wire[6:0] to_ID_EX_EX_control_signals_controller = flush ? 0 : EX_control_signals_controller;
 	ID_EX reg_ID_EX(
 		.clk(clk),
 		.rst(rst),
@@ -99,9 +103,9 @@ module Datapath(
 		.Rt(Rt_out_IF_ID),
 		.Rs(Rs_out_IF_ID),
 		.Rd(Rd_out_IF_ID),
-		.control_signals_WB(WB_control_signals_controller), // todo: add mux for flush (colored red in page 33)
-		.control_signals_M (M_control_signals_controller), // todo: add mux for flush (colored red in page 33)
-		.control_signals_EX(EX_control_signals_controller), // todo: add mux for flush (colored red in page 33)
+		.control_signals_WB(to_ID_EX_WB_control_signals_controller),
+		.control_signals_M (to_ID_EX_M_control_signals_controller),
+		.control_signals_EX(to_ID_EX_EX_control_signals_controller),
 		.out_control_signals_WB(WB_control_signals_ID_EX),
 		.out_control_signals_M(M_control_signals_ID_EX),
 		.out_control_signals_EX(EX_control_signals_ID_EX),
@@ -159,7 +163,6 @@ module Datapath(
 		.write_data_out(write_data_out_EX_MEM)
 	);
 
-	// todo: can use mem-stage instead
 	DataMemory dataMemory(
 		.clk(clk),
 		.addr(ALU_out_result_EX_MEM),
