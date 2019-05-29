@@ -8,6 +8,7 @@ module PC(
     output[31:0] PCVal
 );
     reg[31:0] value ;
+	assign PCVal = value;
     always @(posedge rst , posedge clk) begin
         if ( rst )
             value <= 10'b0 ;
