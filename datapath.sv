@@ -5,7 +5,7 @@ module Datapath(
 );
 	wire[31:0] PC_out, inst_out, PC_offset;
 	wire[31:0] inst_out_IF_ID, offset_out_IF_ID, offset_out_ID_EX;
-	wire flush, holdPC, isBranch, PC_src_controller, isJump, comparatorForBranch ;
+	wire flush, holdPC, isBranch, PC_src_controller, isJump, comparatorForBranch, hold_IF_ID ;
 	wire[1:0] WB_control_signals_controller, WB_control_signals_ID_EX, WB_control_signals_EX_MEM, WB_control_signals_MEM_WB;
 	wire[3:0] M_control_signals_controller, M_control_signals_ID_EX, M_control_signals_EX_MEM;
 	wire[6:0] EX_control_signals_controller, EX_control_signals_ID_EX;
@@ -44,14 +44,16 @@ module Datapath(
 		.instruction(inst_out),
 		.flush(flush),
 		.inst_out(inst_out_IF_ID),
-		.instr15_0(offset_out_IF_ID)
+		.instr15_0(offset_out_IF_ID),
+		.hold_IF_ID(hold_IF_ID)
 	);
 
 	wire[4:0] Rt_out_IF_ID, Rs_out_IF_ID, Rd_out_IF_ID;
 	assign Rs_out_IF_ID = inst_out_IF_ID[25:21];
 	assign Rt_out_IF_ID = inst_out_IF_ID[20:16];
 	assign Rd_out_IF_ID = inst_out_IF_ID[15:11];
-
+	wire[31:0] offset_IF_ID ;
+  assign offset_IF_ID = {14'b0 , inst_out_IF_ID[15:0] , 2'b00} ;
 	HazardDetection hazardDetection(
 		.clk(clk),
 		.Rt_IF_ID(Rt_out_IF_ID),
@@ -59,13 +61,14 @@ module Datapath(
 		.Rt_ID_EX(Rt_out_ID_EX),
 		.signals_M_ID_EX(M_control_signals_ID_EX),
 		.signals_M_Controller(M_control_signals_controller),
-		.offset_ID_EX(offset_out_ID_EX),
+		.offset_IF_ID(offset_IF_ID),
 		.holdPC(holdPC),
-		.IF_ID_Flush(flush),
-		.isBranch(isBranch),
+		.completeInst(inst_out_IF_ID),
 		.PC_offset(PC_offset),
 		.isJump(isJump),
-		.comparatorForBranch(comparatorForBranch)
+		.comparatorForBranch(comparatorForBranch),
+		.hold_IF_ID(hold_IF_ID)
+		
 	);
 
 	Controller controller(
@@ -75,7 +78,10 @@ module Datapath(
 		.EX_control_signals(EX_control_signals_controller),
 		.jOnlyPCsrc(PC_src_controller),
 		.jNextPC(PC_j_out_controller),
-		.isJump(isJump)
+		.isJump(isJump),
+		.comparator(comparatorForBranch),
+		.isBranch(isBranch),
+		.FLUSH(flush)
 	);
 
 	RegisterFile registerFile(
@@ -92,9 +98,9 @@ module Datapath(
 	);
 
 	// in case of flush make input controll signalls zero
-	wire[1:0] to_ID_EX_WB_control_signals_controller = flush ? 0 : WB_control_signals_controller;
-	wire[3:0] to_ID_EX_M_control_signals_controller = flush ? 0 : M_control_signals_controller;
-	wire[6:0] to_ID_EX_EX_control_signals_controller = flush ? 0 : EX_control_signals_controller;
+	wire[1:0] to_ID_EX_WB_control_signals_controller = hold_IF_ID ? 0 : WB_control_signals_controller;
+	wire[3:0] to_ID_EX_M_control_signals_controller  = hold_IF_ID ? 0 : M_control_signals_controller;
+	wire[6:0] to_ID_EX_EX_control_signals_controller = hold_IF_ID ? 0 : EX_control_signals_controller;
 	ID_EX reg_ID_EX(
 		.clk(clk),
 		.rst(rst),
