@@ -26,7 +26,7 @@ module EX_Stage(
 
     reg[31:0] op1 = 0 , op2 = 0 ;
 
-	  assign op2_out = op2;
+	assign op2_out = op2;
 
     ALU alu (ALUop , op1 , ALUsrc ? offset_in : op2 , result) ;
 
