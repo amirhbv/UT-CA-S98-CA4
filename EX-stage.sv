@@ -3,6 +3,7 @@
 module EX_Stage(
     input[ 2:0] fwdA,
                 fwdB,
+    input[31:0] offset_in,
     input[31:0] ID_EX_op1,
                 ID_EX_op2,
                 EX_MEM_op1,
@@ -10,7 +11,6 @@ module EX_Stage(
                 MEM_WB_op1,
                 MEM_WB_op2,
     input[6:0] signals,
-    output Zero,
     output[31:0] result,
 
     input [4:0] Rt,
@@ -24,11 +24,11 @@ module EX_Stage(
     wire ALUsrc = signals[5] ;
     wire RegDst = signals[6] ;
 
-    reg[31:0] op1 , op2 ;
+    reg[31:0] op1 = 0 , op2 = 0 ;
 
-	assign op2_out = op2;
+	  assign op2_out = op2;
 
-    ALU alu (ALUop , op1 , op2 , result , zero) ;
+    ALU alu (ALUop , op1 , ALUsrc ? offset_in : op2 , result) ;
 
     always @(*) begin
         if ( fwdA == 3'b001 ) op1 <= ID_EX_op1 ;

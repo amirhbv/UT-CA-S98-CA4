@@ -9,7 +9,7 @@ module DataMemory(
     output[31:0] read_data
 );
     reg[31:0] MEM [0:1023];
-
+    
     assign read_data = MEM[ addr[9:0] ] ;
     always @(negedge clk)   begin
         if ( write_enable )
@@ -17,6 +17,8 @@ module DataMemory(
     end
 
 	initial begin
+	  for ( integer i = 0 ; i < 1024 ; i = i + 1) MEM[i] = 32'b0 ;
 		MEM[0] = 5;
+		MEM[1] = 10 ;
 	end
 endmodule
