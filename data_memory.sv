@@ -20,8 +20,14 @@ module DataMemory(
 	  for ( integer i = 0 ; i < 1024 ; i = i + 1) MEM[i] = 32'b0 ;
 		MEM[0] =  5;
 		MEM[1] = 10;
-		MEM[2] = 15;
+		MEM[2] = 1;
 		MEM[3] = 20;
 		MEM[4] = 25;
+
+		MEM[1000] =  5;
+		MEM[1001] = 10;
+		MEM[1002] = 1;
+		MEM[1003] = 20;
+		MEM[1004] = 25;
 	end
 endmodule
