@@ -2,12 +2,15 @@
 
 module Controller(
     input[31:0] inst,
+    input comparator,
     output[1:0] WB_control_signals,
     output[3:0] M_control_signals,
     output[6:0] EX_control_signals,
     output reg jOnlyPCsrc,
     output reg isJump,
-    output reg[31:0] jNextPC
+    output reg[31:0] jNextPC,
+    output reg FLUSH,
+    output reg isBranch
 );
 
     //EX signals
@@ -30,7 +33,7 @@ module Controller(
     assign M_control_signals = {PCsrcForBNE, PCsrcForBEQ, MemRead, MemWrite} ;
 
 
-    always@(*) begin
+    always@(inst) begin
         //opcode
         begin
             MemToReg = 0 ;
@@ -42,7 +45,11 @@ module Controller(
             MemRead = 0 ;
             PCsrcForBNE = 0 ;
             PCsrcForBEQ = 0 ;
-			isJump = 0 ;
+			      isJump = 0 ;
+			      jOnlyPCsrc = 0 ;
+			      jNextPC = 0 ;
+			      FLUSH = 0 ;
+			      isBranch = 0 ;
         end
 
         case (inst[31:26])
@@ -86,16 +93,17 @@ module Controller(
                 jOnlyPCsrc = 1 ;
                 isJump = 1 ;
                 jNextPC = { 4'b0000 , inst[25:0] , 2'b00 } ;
+                FLUSH = 1 ;
             end
 
             //BEQ - if there was no data dependency we should change the PC immdtly
             6'b000100 : begin
-                PCsrcForBEQ = 1 ;
+                if (  comparator ) begin isBranch = 1 ; FLUSH = 1 ; end
             end
 
             //BNE - DEPENDENCY
             6'b000101 : begin
-                PCsrcForBNE = 1 ;
+                if ( ~comparator ) begin isBranch = 1 ; FLUSH = 1 ; end
             end
 
         endcase
