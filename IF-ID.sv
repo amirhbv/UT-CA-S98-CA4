@@ -4,6 +4,7 @@ module IF_ID(
     input clk, rst,
     input[31:0] instruction,
     input flush,
+    input hold_IF_ID,
     output reg [31:0] inst_out,
     output [31:0] instr15_0
 );
@@ -12,12 +13,11 @@ module IF_ID(
     always @(posedge clk , posedge rst) begin
         if ( rst )
             inst_out <= 32'b0 ;
-        else
+        else if ( flush )
+            inst_out <= 32'b0 ;
+        else if ( hold_IF_ID == 0 )
             inst_out <= instruction ;
-    end
-    
-    always @(posedge flush) begin
-      inst_out <= 32'b0 ;
+        
     end
     
 endmodule
