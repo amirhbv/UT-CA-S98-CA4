@@ -20,8 +20,8 @@ module Datapath(
 	wire[31:0] result_out_MEM_WB;
 	wire[31:0] read_data_out_MEM_WB;
 	wire[31:0] write_out_data_WB_out, ALU_result_out_EX_MEM;
-
-
+  
+  
 	PC pc(
 		.clk(clk),
 		.rst(rst),
@@ -34,7 +34,6 @@ module Datapath(
 	);
 
 	InstructionMemory instructionMemory(
-	  	.clk(clk),
 		.addr(PC_out),
 		.inst_out(inst_out)
 	);
