@@ -20,8 +20,8 @@ module Datapath(
 	wire[31:0] result_out_MEM_WB;
 	wire[31:0] read_data_out_MEM_WB;
 	wire[31:0] write_out_data_WB_out, ALU_result_out_EX_MEM;
-  
-  
+
+
 	PC pc(
 		.clk(clk),
 		.rst(rst),
@@ -53,6 +53,7 @@ module Datapath(
 	assign Rd_out_IF_ID = inst_out_IF_ID[15:11];
 
 	HazardDetection hazardDetection(
+		.clk(clk),
 		.Rt_IF_ID(Rt_out_IF_ID),
 		.Rs_IF_ID(Rs_out_IF_ID),
 		.Rt_ID_EX(Rt_out_ID_EX),
