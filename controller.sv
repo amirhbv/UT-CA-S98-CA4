@@ -42,6 +42,7 @@ module Controller(
             MemRead = 0 ;
             PCsrcForBNE = 0 ;
             PCsrcForBEQ = 0 ;
+			isJump = 0 ;
         end
 
         case (inst[31:26])
@@ -78,7 +79,6 @@ module Controller(
                 ALUsrc = 1 ;
                 ALUop = 5'b00001 ; //add
                 MemWrite = 1 ;
-                
             end
 
             //J - changes PC
